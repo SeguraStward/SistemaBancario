@@ -11,7 +11,13 @@ class Cliente
 	string numeroDeContacto;
 
 public:
-	Cliente(){}
+	Cliente()
+	{
+		nombreCompleto = "";
+		identificacion = 0;
+		direccion = "";
+		numeroDeContacto = "";
+	}
 	Cliente(const string& nombre, const int& id, const string& direccion, const string& numDeContacto)
 	{
 		nombreCompleto = nombre;
@@ -20,22 +26,22 @@ public:
 		numeroDeContacto = numDeContacto;
 	}
 
-	string getNombreCompleto() const
+	string &getNombreCompleto()
 	{
 		return nombreCompleto;
 	}
 
-	int getIdentificacion() const
+	int getIdentificacion()
 	{
 		return identificacion;
 	}
 
-	string getDireccion() const
+	string &getDireccion()
 	{
 		return direccion;
 	}
 
-	string getNumeroDeContacto() const
+	string &getNumeroDeContacto()
 	{
 		return numeroDeContacto;
 	}

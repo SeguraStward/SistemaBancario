@@ -11,7 +11,18 @@ public:
 	void eliminarUltimo();
 	void eliminarPrimero();
 	void eliminarCliente(int index);
-	void agregarCliente(const Cliente& nuevoCliente);
+	void agregarCliente(Cliente& nuevoCliente);
 	void modificarCliente(int index);
 	void mostrarClientes();
+	void mostrarAllInfoClientes();
+	int contadorDeClientes(Gestor* gestor);
+	Cliente* getClientes()
+	{
+		return clientes;
+	}
+	int getSize() const
+	{
+		return size;
+	}
+	int recursiveMethod(int min, int max);
 };
