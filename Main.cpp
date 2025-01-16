@@ -1,6 +1,8 @@
 #include <iostream>
 #include "GestorClientes.h"
- 
+#include "Pila.h"
+#include "Transaccion.h"
+
 using namespace std;
 
 
@@ -132,9 +134,18 @@ void menuPrincipal(Gestor &gestor)
 
 int main()
 {
-	Gestor gestor;
+//	Gestor gestor;
 
-	menuPrincipal(gestor);
-	 
+	//menuPrincipal(gestor);
+
+	Pila<Transaccion> pila;
+
+	string hola = "shfshfsd";
+	int i = 123123;
+	Transaccion transaccion(hola, hola, hola, hola, hola, i);
+	pila.empilar(transaccion);
+
+	Transaccion aux = pila.desempilar();
+ 
 	return 0;
 }
