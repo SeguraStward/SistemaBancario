@@ -134,9 +134,9 @@ void menuPrincipal(Gestor &gestor)
 
 int main()
 {
-//	Gestor gestor;
-
-	//menuPrincipal(gestor);
+	//Entregable 1, habilite esta seccion 
+    //Gestor gestor; //en el gestor esta el array de clientes y los metodos con su informacion
+	//menuPrincipal(gestor); 
 
 	Pila<Transaccion> pila;
 
@@ -146,6 +146,6 @@ int main()
 	pila.empilar(transaccion);
 
 	Transaccion aux = pila.desempilar();
- 
+  
 	return 0;
 }

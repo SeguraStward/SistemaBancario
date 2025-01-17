@@ -20,14 +20,14 @@ public:
 		Nodo<T>* actual = frente;
 		while (actual != nullptr) {
 			Nodo<T>* next = actual->next;
-			actual->dato.~T();// lama al destructor por si el dato t tiene memoria asignada dinamicamente 
+			actual->dato.~T();// llama al destructor por si el dato t tiene memoria asignada dinamicamente 
 			delete actual;
 			actual = nullptr;
 			actual = next;
 		}
 	}
 
-	void empilar(T dato)
+	void empilar(T& dato)
 	{ 
 		Nodo<T>* nuevo = new Nodo<T>(dato); 
 		nuevo->next = frente;
@@ -39,24 +39,23 @@ public:
 		return frente == nullptr;
 	}
 
-	T &desempilar(){
+	T desempilar(){//retorna una referencia al dato T
 		if (!vacia()) {
 			return frente->dato;
 		}
-		cout << "Pila vacia\n";
-		throw std::runtime_error("Error: Pila vacia. No se puede desempilar.");
+		cout << "Pila vacia\n"; 
 	}
 
 	void desempilarCritico() {
 		if (!vacia()) {
 			Nodo<T>* aux = frente;
 			frente = frente->next;
-			destroy_at(&aux->dato);
+			aux->dato.~T();
 			delete aux;
 			aux = nullptr;
+			return;
 		}
-		cout << "Pila vacia\n";
-		throw std::runtime_error("Error: Pila vacia. No se puede desempilar.");
+		cout << "Pila vacia\n"; 
 	}
 
 };
