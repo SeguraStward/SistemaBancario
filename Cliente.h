@@ -46,7 +46,7 @@ public:
 		return numeroDeContacto;
 	}
 
-	void setNombreCompleto(const std::string& nuevoNombre)
+	void setNombreCompleto(const string& nuevoNombre)
 	{
 		nombreCompleto = nuevoNombre;
 	}
@@ -56,12 +56,12 @@ public:
 		identificacion = nuevoId;
 	}
 
-	void setDireccion(const std::string& nuevaDireccion)
+	void setDireccion(const string& nuevaDireccion)
 	{
 		direccion = nuevaDireccion;
 	}
 
-	void setNumeroDeContacto(const std::string& nuevoNumContacto)
+	void setNumeroDeContacto(const string& nuevoNumContacto)
 	{
 		numeroDeContacto = nuevoNumContacto;
 	}

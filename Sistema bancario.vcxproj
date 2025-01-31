@@ -129,15 +129,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GestorClientes.cpp" />
+    <ClCompile Include="HashMap.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SistemaBancario.cpp" />
+    <ClCompile Include="Sorting.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BST.h" />
     <ClInclude Include="Cliente.h" />
+    <ClInclude Include="Cola.h" />
+    <ClInclude Include="ColaPrioritaria.h" />
     <ClInclude Include="Cuenta.h" />
     <ClInclude Include="GestorClientes.h" />
+    <ClInclude Include="HashMap.h" />
     <ClInclude Include="ListaCuentas.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="Pila.h" />
+    <ClInclude Include="SistemaBancario.h" />
+    <ClInclude Include="Sorting.h" />
     <ClInclude Include="Transaccion.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

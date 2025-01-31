@@ -1,151 +1,222 @@
-#include <iostream>
+#include <chrono>
+#include <iostream> 
+
+#include "Cola.h"
+#include "ColaPrioritaria.h"
 #include "GestorClientes.h"
+#include "ListaCuentas.h"
 #include "Pila.h"
+#include "SistemaBancario.h"
 #include "Transaccion.h"
 
 using namespace std;
 
-
-void limpiarPantalla() {
-#ifdef _WIN32
-	system("cls");
-#else
-	system("clear");
-#endif
-}
-
-void modificarOEliminarCliente(Gestor& gestor)
+  
+void probarMergeSort(int n)//n la cantidad de datos que quiera ordena
 {
-	int indice = -1;
-	int choose = -1;
-	gestor.mostrarClientes();
-	cout << "Ingrese el indice del cliente que desea modificar o eliminar: ";
-
-	cin >> indice;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-	cout << "1-Modificar cliente  2-Eliminar cliente";
-	cin >> choose;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	switch (choose)
+	Gestor gestor;
+	for (int i = n; i > 0; i--)
 	{
-	case 1://caso 1 para modificar el cliente se valida el indice y se utiliza el metodo para modificar
-		if (indice < gestor.getSize() && indice >= 0)
-		{
-			gestor.modificarCliente(indice);
-		}
-		else
-		{
-			cout << "Indice invalido\n";
-		}
-		break;
-	case 2: //caso 2 igual que el uno solo que elimina el indice
-		if (indice < gestor.getSize() && indice >= 0)
-		{
-			gestor.eliminarCliente(indice);
-		}
-		else
-		{
-			cout << "Indice invalido\n";
-		}
-		break;
-	default:
-		cout << "No elegiste una opcion valida...\n";
-		break;
+		Cliente* cliente = new Cliente("aux", i, "fsdafs", "3424242"); 
+		gestor.agregarCliente(*cliente);
 	}
 
+	//for (int i = 0; i < gestor.getSize(); i++)
+	//{
+	//	cout << "identificacion del cliente numero: " << i << "->" << gestor.getClientes()[i].getIdentificacion() << "\n";
+	//}
+	auto start = chrono::high_resolution_clock::now();
+	RecursiveMergeSort(gestor.getClientes(), 0, gestor.getSize()-1);
+	auto end = chrono::high_resolution_clock::now();
+	chrono::duration<double, milli> duration = end - start;
+	cout << "____________________________________________\n";
+	/*for (int i = 0; i < gestor.getSize(); i++)
+	{
+		cout << "identificacion del cliente numero: " << i << "->" << gestor.getClientes()[i].getIdentificacion() << "\n";
+	}*/
+	cout << "Tiempo de ejecucion de MergeSort: " << duration.count() << " ms\n";
 }
 
-void registrarClientes(Gestor &gestor)
+void probarHeapSort(int n)//n la cantidad de datos que quiera ordena
 {
+	Gestor gestor;
+	for (int i = n; i > 0; i--)
+	{
+		Cliente* cliente = new Cliente("aux", i, "fsdafs", "3424242");
+		gestor.agregarCliente(*cliente);
+	}
+
+	//for (int i = 0; i < gestor.getSize(); i++)
+	//{
+	//	cout << "identificacion del cliente numero: " << i << "->" << gestor.getClientes()[i].getIdentificacion() << "\n";
+	//}
+	auto start = chrono::high_resolution_clock::now();
+	HeapSort(gestor.getClientes(),gestor.getSize() - 1);
+	auto end = chrono::high_resolution_clock::now();
+	chrono::duration<double, milli> duration = end - start;
+	cout << "____________________________________________\n";
+	/*for (int i = 0; i < gestor.getSize(); i++)
+	{
+		cout << "identificacion del cliente numero: " << i << "->" << gestor.getClientes()[i].getIdentificacion() << "\n";
+	}*/
+	cout << "Tiempo de ejecucion de HeapSort: " << duration.count() << " ms\n";
+}
+
+void probarQuickSort(int n)//n la cantidad de datos que quiera ordena
+{
+	Gestor gestor;
+	for (int i = n; i > 0; i--)
+	{
+		Cliente* cliente = new Cliente("aux", i, "fsdafs", "3424242");
+		gestor.agregarCliente(*cliente);
+	}
+
+	/*for (int i = 0; i < gestor.getSize(); i++)
+	{
+		cout << "identificacion del cliente numero: " << i << "->" << gestor.getClientes()[i].getIdentificacion() << "\n";
+	}*/
 	 
-	string nombre;
-	string direccion;
-	string numeroContacto;
-	static int id = 0;
-	string finalizar;
-	   
-		cout << "Ingrese nombre: ";
-		getline(cin, nombre);
-		cout << "\n";
-		cout << "Ingrese direccion: ";
-		getline(cin, direccion);
-		cout << "\n";
-		cout << "Ingrese numero: ";
-		getline(cin, numeroContacto);
-		cout << "\n";
+	auto start = chrono::high_resolution_clock::now(); 
+	QuickSort(gestor.getClientes(), 0, gestor.getSize()-1);
+	auto end = chrono::high_resolution_clock::now();  
 
-		id++;
-		Cliente cliente = Cliente(nombre, id, direccion, numeroContacto);//creando cliente
+	// Calcular la duracion en milisegundos
+	 chrono::duration<double, milli> duration = end - start;
 
-		gestor.agregarCliente(cliente);//agregando al registro
-
-
-		cout << "Desea continuar, si o no?" << endl;
-		getline(cin, finalizar);
-		if (finalizar != "no")//se pregunta si se quiere seguir,  si es diferente de no entonces se llama el metodo recursivamente para ingregar otro cliente 
-		{ 
-			registrarClientes(gestor);
-		}
-		else
-		{
-			limpiarPantalla();
-		}  
-}
-
-void menuPrincipal(Gestor &gestor)
-{
 	
-	int eleccion = -1;
-	cout << "Elige que deseas hacer \n1-Registrar clientes\n2-Modificar o eliminar clientes"
-		 "\n3-Usar metodo recursivo\n4-Mostrar todos los clientes registrados\notra tecla para salir...\n"; 
-	cin >> eleccion;
-	
-	cout << "\n";
-	switch (eleccion)
+	cout << "____________________________________________\n";
+	/*for (int i = 0; i < gestor.getSize(); i++)
 	{
-		
-	case 1: //para registrar los clientes
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');// estaba teniendo un error con los cin y getline y tuve que usar esto que ignora el caracter "\n" que deja cin
-		registrarClientes(gestor);
-		limpiarPantalla();
-		menuPrincipal(gestor);
-		break;
-	case 2: //para eliminar o modificar
-		modificarOEliminarCliente(gestor);
-		limpiarPantalla();
-		menuPrincipal(gestor);
-		break;
-	case 3://usamos el metodo recursivo para contar
-		cout<<"La cantidad de clientes registrados es: "<<gestor.contadorDeClientes(&gestor)<<"\n"; 
-		menuPrincipal(gestor);
-		break;
-	case 4://mostramos todos los clientes y todos sus datos
-		gestor.mostrarAllInfoClientes();
-		menuPrincipal(gestor);
-		break;
-	default:
+		cout << "identificacion del cliente numero: " << i << "->" << gestor.getClientes()[i].getIdentificacion() << "\n";
+	}*/
 
-		break;
-	}
+	cout << "Tiempo de ejecucion de QuickSort: " << duration.count() << " ms\n";
 }
 
+void probarBubbleSort(int n)//n la cantidad de datos que quiera ordenar
+{
+	ListaCuentas<Cuenta> cuentas;
+	for (int i = n; i > 0; i--)
+	{
+		Cuenta* cuenta = new Cuenta(1, i, i);
+		cuentas.abrirCuenta(*cuenta);
+	}
 
+	/*for (int i = 0; i < cuentas.getSize(); i++)
+	{
+		cout << "Monto de la cuenta: " << i << "->" << cuentas.getNodo(i)->dato.getSaldo() << "\n";
+	}*/
+	auto start = chrono::high_resolution_clock::now();
+	bubbleSort(cuentas);
+	auto end = chrono::high_resolution_clock::now();
+	chrono::duration<double, milli> duration = end - start;
+	cout << "____________________________________________\n";
+	/*for (int i = 0; i < cuentas.getSize(); i++)
+	{
+		cout << "Monto de la cuenta: " << i << "->" <<  cuentas.getNodo(i)->dato.getSaldo() << "\n";
+	}*/
+	cout << "Tiempo de ejecucion de BubbleSort: " << duration.count() << " ms\n";
+}
+void probarInsertionSort(int n)//n la cantidad de datos que quiera ordenar
+{
+	ListaCuentas<Cuenta> cuentas;
+	for (int i = n; i > 0; i--)
+	{
+		Cuenta* cuenta = new Cuenta(1, i, i);
+		cuentas.abrirCuenta(*cuenta);
+	}
 
+	/*for (int i = 0; i < cuentas.getSize(); i++)
+	{
+		cout << "Monto de la cuenta: " << i << "->" << cuentas.getNodo(i)->dato.getSaldo() << "\n";
+	}*/
+	auto start = chrono::high_resolution_clock::now();
+	insertionSort(cuentas);
+	auto end = chrono::high_resolution_clock::now();
+	chrono::duration<double, milli> duration = end - start;
+	cout << "____________________________________________\n";
+	/*for (int i = 0; i < cuentas.getSize(); i++)
+	{
+		cout << "Monto de la cuenta: " << i << "->" << cuentas.getNodo(i)->dato.getSaldo() << "\n";
+	}*/
+	cout << "Tiempo de ejecucion de InsertionSort: " << duration.count() << " ms\n";
+}
+void probarSelectionSort(int n)//n la cantidad de datos que quiera ordenar
+{
+	ListaCuentas<Cuenta> cuentas;
+	for (int i = n; i > 0; i--)
+	{
+		Cuenta* cuenta = new Cuenta(1, i, i);
+		cuentas.abrirCuenta(*cuenta);
+	}
+
+	/*for (int i = 0; i < cuentas.getSize(); i++)
+	{
+		cout << "Monto de la cuenta: " << i << "->" << cuentas.getNodo(i)->dato.getSaldo() << "\n";
+	}*/
+	auto start = chrono::high_resolution_clock::now();
+	selectionSort(cuentas);
+	auto end = chrono::high_resolution_clock::now();
+	chrono::duration<double, milli> duration = end - start;
+	cout << "____________________________________________\n";
+	/*for (int i = 0; i < cuentas.getSize(); i++)
+	{
+		cout << "Monto de la cuenta: " << i << "->" << cuentas.getNodo(i)->dato.getSaldo() << "\n";
+	}*/
+	cout << "Tiempo de ejecucion de SelectionSort: " << duration.count() << " ms\n";
+}
+ 
 int main()
 {
-	//Entregable 1, habilite esta seccion 
-    //Gestor gestor; //en el gestor esta el array de clientes y los metodos con su informacion
-	//menuPrincipal(gestor); 
+	 
+	//Entregable 3
 
-	Pila<Transaccion> pila;
+	//probe con 20 mil 10 mil 5 mil y 4 mil pero no me funciono se termina el programa
+	//talvez se requiera cuantiosos elementos para que brillen los algoritmos que tienen tiempo de complejidad O(n log n)
+	//me sorprendio insertionsort mucho 
 
-	string hola = "shfshfsd";
-	int i = 123123;
-	Transaccion transaccion(hola, hola, hola, hola, hola, i);
-	pila.empilar(transaccion);
+	//probarQuickSort(2000);//0.1862 ms con 90 elementos; con 2000 elementos 7.8003 ms; con 3000 elementos 12.4636 ms
+	//cout << "-------------------------------------\n";
+	//probarBubbleSort(2000);//0.0933 ms con 90 elementos;  con 2000 elementos 46.5918 ms; con 3000 elementos 97.2895 ms
+	//cout << "-------------------------------------\n";
+	//probarHeapSort(2000);//0.6243 ms con 90 elementos; con 2000 elementos 17.8081 ms; con 3000 elementos 27.4459 ms
+	//cout << "-------------------------------------\n";
+	//probarMergeSort(2000);//2.8412 ms con 90 elementos; con 2000 elementos 1216.8 ms; con 3000 elementos  2932.96 ms
+	//cout << "-------------------------------------\n";
+	//probarSelectionSort(2000);//0.0364 ms con 90 elementos; con 2000 elementos 7.6234 ms; con 3000 elementos 17.7438 ms
+	//cout << "-------------------------------------\n";
+	//probarInsertionSort(2000);//0.0011ms con 90 elementos; con 2000 elementos 0.0088 ms; con 3000 elementos 0.0123 ms
 
-	Transaccion aux = pila.desempilar();
-  
+	//Con 90 elementos 1-insertionsort 2-quicksort 3-selectionsort 4-bubblesort 5-heapsort
+	//Con 2000 elementos 1-insertionsort 2-selectionsort 3-quicksort 4-heapsort 5-bubblesort 6-mergesort
+	//Con 3000 elementos 1-insertionsort 2-quicksort 3-selectionsort 4-heapsort 5-bubblesort 6-mergesort
+
+	 
+	//entregable 4
+	// Sistema bancario funcional
+	//
+ //   SistemaBancario sistema;
+	//sistema.menuPrincipal(); 
+
+
+
+	/*BST<int> tree;  Probando el arbol binario con int
+
+	tree.insert(100);
+	tree.insert(70);
+	tree.insert(7);
+	tree.insert(700);
+	tree.insert(50);
+	tree.insert(24);
+	tree.insert(44);
+	cout << "Preorden: ";
+	tree.preorder(tree.getRoot());
+	cout << "\nInOrden: ";
+	tree.inorder(tree.getRoot());
+	cout << "\nPostorden: ";
+	tree.postorder(tree.getRoot());*/
+
+	 
+
 	return 0;
 }

@@ -7,7 +7,10 @@ class Gestor
 	Cliente* clientes;
 	int size;
 public:
-	Gestor(); 
+	Gestor();
+	//destructor
+	~Gestor();
+	Cliente* getCliente(int id);
 	void eliminarUltimo();
 	void eliminarPrimero();
 	void eliminarCliente(int index);

@@ -8,42 +8,37 @@ using namespace std;
 template <typename T>
 class Cola {
 	Nodo<T>* firstOut;
-		Nodo<T>* lastOut;
+		Nodo<T>* last;
 public:
-     
-	bool vacia()
-	{
-		return firstOut == nullptr;
-	}
-
-
-    ~Cola() { // Destructor para evitar fugas de memoria
+    
+    Cola()
+    {
+        firstOut = nullptr;
+        last = nullptr;
+    }
+    ~Cola() {  //para evitar fugas de memoria
         while (firstOut != nullptr) {
-            Nodo<T>* temp = firstOut;
+            Nodo<T>* temp = firstOut; 
             firstOut = firstOut->next;
             delete temp;
         }
     }
 
-    void encolar(T& dato) { // Recibe una const referencia
+    void encolar(T& dato) { 
         Nodo<T>* nuevo = new Nodo<T>(dato);
 
         if (vacia()) {
-            firstOut = lastOut = nuevo;
+            firstOut = last = nuevo;
         }
         else {
-            lastOut->next = nuevo;
-            lastOut = nuevo;
+            last->next = nuevo;
+            last = nuevo;
         }
     }
-
-    bool vacia() const {
-        return firstOut == nullptr;
-    }
-
+  
     T desencolar() {
         if (vacia()) {
-            throw std::runtime_error("Error: Cola vacia. No se puede desencolar.");
+            throw runtime_error("Cola vacia");
         }
 
         Nodo<T>* temp = firstOut;
@@ -52,8 +47,37 @@ public:
         delete temp;
 
         if (firstOut == nullptr) { 
-            lastOut = nullptr;
+            last = nullptr;
         } 
         return valor;
+    }
+
+    bool vacia()
+    {
+        return firstOut == nullptr;
+    }
+
+    void probarCola(T datos[], int tamano) {
+        Cola<T> miCola;
+        cout << "encolando: ";
+        for (int i = 0; i < tamano; ++i) {
+            miCola.encolar(datos[i]);
+            cout << datos[i] << " ";
+        }
+        cout << endl;
+
+         cout << "desencolando: ";
+        try {
+            while (!miCola.vacia()) {
+                 cout << miCola.desencolar() << " ";
+            }
+             cout << endl;
+
+            miCola.desencolar(); // desencolando cuando ya esta vacia para ver la excepcion
+        }
+        catch (const runtime_error& e) {
+           cerr << "exceptionnn: " << e.what() << endl;
+        }
+         cout << "\n----------------------------------\n";
     }
 };

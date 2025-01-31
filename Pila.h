@@ -16,14 +16,11 @@ public:
 	{
 		frente = nullptr;
 	}
-	~Pila() { //Destructor para evitar memory leaks
-		Nodo<T>* actual = frente;
-		while (actual != nullptr) {
-			Nodo<T>* next = actual->next;
-			actual->dato.~T();// llama al destructor por si el dato t tiene memoria asignada dinamicamente 
-			delete actual;
-			actual = nullptr;
-			actual = next;
+	~Pila() { //destructor para evitar fugas de memoria 
+		while (frente != nullptr) {
+			Nodo<T>* temp = frente;
+			frente = frente->next;
+			delete temp;  
 		}
 	}
 
@@ -38,24 +35,52 @@ public:
 	{
 		return frente == nullptr;
 	}
-
-	T desempilar(){//retorna una referencia al dato T
-		if (!vacia()) {
-			return frente->dato;
+	 
+	T desempilar() {  
+		if (vacia()) {
+			throw runtime_error("Pila vacia");
 		}
-		cout << "Pila vacia\n"; 
+		Nodo<T>* temp = frente;
+		T valor = temp->dato;  
+		frente = frente->next;
+		delete temp;
+		return valor; 
 	}
 
-	void desempilarCritico() {
-		if (!vacia()) {
-			Nodo<T>* aux = frente;
-			frente = frente->next;
-			aux->dato.~T();
-			delete aux;
-			aux = nullptr;
-			return;
+	void probarPila(T datos[], int tamano) {
+		Pila<T> miPila;
+		 cout << "desempilando: ";
+		for (int i = 0; i < tamano; ++i) {
+			miPila.empilar(datos[i]);
+			 cout << datos[i] << " ";
 		}
-		cout << "Pila vacia\n"; 
+		 cout << endl;
+
+		 cout << "desempilando: ";
+		try {
+			while (!miPila.vacia()) {
+				 cout << miPila.desempilar() << " ";
+			}
+			 cout << endl;
+			miPila.desempilar(); // desempilando para probar
+		}
+		catch (const runtime_error& e) {
+			 cerr << "excepcion al desempilar: " << e.what() << endl;
+		}
+		 cout << "----------------------------------\n";
 	}
 
+
+	void imprimirPila()
+	{
+		Nodo<T>* actual = frente;
+		while (actual != nullptr) {
+
+			actual->dato.imprimir();
+			actual = actual->next;
+		}
+		cout << "Historial de transacciones de la cuenta mostrado.\n";
+	}
+
+	
 };

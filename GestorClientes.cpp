@@ -6,7 +6,24 @@ Gestor::Gestor()
 	size = 0;
 	clientes = new Cliente[size];
 }
+Gestor::~Gestor()
+{
+	delete[] clientes;
+	
+}
+Cliente* Gestor::getCliente(int id)
+{
 
+	for(int i = 0; i< size;i++)
+	{
+		if(clientes[i].getIdentificacion() == id)
+		{
+			return &clientes[i];
+		}
+	}
+
+	return nullptr;
+}
 void Gestor::agregarCliente(Cliente& nuevoCliente)
 {
 	size++;
