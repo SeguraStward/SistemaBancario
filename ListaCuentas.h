@@ -215,8 +215,10 @@ public:
 	void imprimirCuentasDelUsuarioId(int id)
 	{
 		Nodo<T>* actual = head;
-		if (head == nullptr)return;
-
+		if (head == nullptr) {
+			cout << "El usuario no tiene cuentas en el sistema.\n";
+			return;
+		}
 		cout << "Cuentas del usuario con id: " << id<<"\n";
 		while(actual != nullptr)
 		{
@@ -248,8 +250,10 @@ public:
 	void imprimirCuentas()
 	{
 		Nodo<T>* actual = head;
-		if (head == nullptr)return;
-
+		if (head == nullptr) {
+			cout << "No hay cuentas.\n";
+			return;
+		}
 		cout << "Todas las cuentas a las que puedes realizar transferencias\n\n";
 		while (actual != nullptr)
 		{ 

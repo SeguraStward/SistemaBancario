@@ -19,7 +19,7 @@ unsigned long HashMap::hash(string key)//estoy usando jdb2 funcion hash creada p
 	return hash % size; 
 }
 
-void HashMap::insert(string key, string password)
+void HashMap::insert(const string key, const string password)
 {
 	if(static_cast<float>(elements)/static_cast<float>(size) >= 0.5)//para evitar que se llene, evitamos problemas y la tabla se mantiene eficiente, es recomendado mantener el factor de carga igual o menor a 0.5 eso dice mi profesor indu
 	{

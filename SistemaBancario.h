@@ -9,12 +9,14 @@
 #include "Transaccion.h"
 #include "Sorting.h"
 #include <iostream> 
+
+#include "HashMap.h"
 using namespace std;
 
 string obtenerHoraActual();
 string obtenerFechaActual();
-
-
+int leerNumero();
+void limpiarPantalla();
 class SistemaBancario
 {
 	ListaCuentas<Cuenta> cuentas;//se guardan todas las cuentas
@@ -23,8 +25,12 @@ class SistemaBancario
 	Cola<Transaccion> solicitudes;//las transacciones normales iran aqui
 	ColaPrioritaria<Transaccion> solicitudesPrioritarias;//transacciones prioritarias aqui
 	int idClienteActual = 0;// id del cliente actual
+	HashMap* passwords;
 public:
-
+	SistemaBancario()
+	{
+		passwords = new HashMap(100);
+	}
 	void menuPrincipal();//se seleccionara una operacion
 	void agregarClientes();//se registran los clientes
 	void agregarCuentas();//se le agrega una cuenta al cliente que ingrese su id
@@ -42,4 +48,5 @@ public:
 	bool transferencia(Transaccion transaccion);//accion de transferencia bancaria
 	void depositoRetiro(Transaccion transaccion);//accion de deposito o retirno de dinero en una cuenta
 	void cuentasYTransacciones();//muestra las cuentas y en caso de querer mostrar las transacciones de una cuenta especifica las muestra
+	void procesarOBloquear(Transaccion actual);
 };

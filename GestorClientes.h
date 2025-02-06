@@ -14,11 +14,13 @@ public:
 	void eliminarUltimo();
 	void eliminarPrimero();
 	void eliminarCliente(int index);
-	void agregarCliente(Cliente& nuevoCliente);
+	bool agregarCliente(Cliente& nuevoCliente);
 	void modificarCliente(int index);
 	void mostrarClientes();
 	void mostrarAllInfoClientes();
 	int contadorDeClientes(Gestor* gestor);
+	bool nombreOcupado(string name);
+	Cliente* binarySearch(string nombre, int l, int h);
 	Cliente* getClientes()
 	{
 		return clientes;

@@ -129,15 +129,15 @@ void RecursiveMergeSort(Cliente A[], int low, int high) {
 
 
 int partition(Cliente A[], int low, int high) {
-    int pivot = A[low].getIdentificacion();
+	string pivot = A[low].getNombreCompleto();
     int i = low + 1;
     int j = high;
 
     while (true) {
-        while (i <= j && A[i].getIdentificacion() <= pivot) {
+        while (i <= j && A[i].getNombreCompleto() <= pivot) {
             i++;
         }
-        while (A[j].getIdentificacion() >= pivot && j >= i) {
+        while (A[j].getNombreCompleto() >= pivot && j >= i) {
             j--;
         }
         if (j < i) {

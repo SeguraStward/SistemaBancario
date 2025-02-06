@@ -24,7 +24,7 @@ public:
 	}
 	int probe(string key);
 	unsigned long hash(string key);
-	void insert(string key,string password);
+	void insert(const string key,const string password);
  
 	bool search(string key, string password);
 

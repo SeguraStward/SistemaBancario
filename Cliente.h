@@ -70,7 +70,7 @@ public:
 	{
 		cout << "Nombre: " << nombreCompleto << endl;
 		cout << "ID: " << identificacion << endl;
-		cout << "Dirección: " << direccion << endl;
-		cout << "Número de contacto: " << numeroDeContacto << endl;
+		cout << "Direccion: " << direccion << endl;
+		cout << "Numero de contacto: " << numeroDeContacto << endl;
 	}
 };

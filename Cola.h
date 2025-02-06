@@ -24,7 +24,7 @@ public:
         }
     }
 
-    void encolar(T& dato) { 
+    void encolar(const T& dato) { 
         Nodo<T>* nuevo = new Nodo<T>(dato);
 
         if (vacia()) {

@@ -1,6 +1,8 @@
 #include "GestorClientes.h"
 
- 
+#include "Sorting.h"
+
+
 Gestor::Gestor()
 {
 	size = 0;
@@ -24,8 +26,16 @@ Cliente* Gestor::getCliente(int id)
 
 	return nullptr;
 }
-void Gestor::agregarCliente(Cliente& nuevoCliente)
+
+
+
+bool Gestor::agregarCliente(Cliente& nuevoCliente)
 {
+	if(nombreOcupado(nuevoCliente.getNombreCompleto()))
+	{
+		cout << "El nombre elegido para el cliente no esta disponible.\n";
+		return false;
+	}
 	size++;
 	Cliente* auxiliar = new Cliente[size];//creando un nuevo array dinamico con mayor size
 
@@ -39,7 +49,7 @@ void Gestor::agregarCliente(Cliente& nuevoCliente)
 	 delete[] clientes;//liberando memoria
 	 clientes = nullptr; //desocupando direccion de memoria
 	 clientes = auxiliar;//ahora clientes apunta a la misma direccion de auxiliar que es el vector actualizado
-
+	 return true;
 }
 
 void Gestor::eliminarPrimero()
@@ -137,6 +147,39 @@ void Gestor::mostrarAllInfoClientes()
 int Gestor::contadorDeClientes(Gestor* gestor)
 { 
 	return recursiveMethod(1, gestor->getSize());
+}
+
+bool Gestor::nombreOcupado(string name)
+{
+	QuickSort(clientes, 0, size - 1);
+
+
+
+	Cliente* cliente = binarySearch(name,0,size-1);
+	if (cliente == nullptr)return false;
+
+
+	return true;
+}
+
+Cliente* Gestor::binarySearch(string nombre, int l, int h)
+{
+
+	
+	if (l <= h) {
+		int mid = (h + l) / 2;//calculamos el medio
+		if (clientes[mid].getNombreCompleto() == nombre)//si es el que buscamos entones retornamos
+		{
+			return &clientes[mid];
+		}
+		if (clientes[mid].getNombreCompleto() < nombre)//si el que buscamos es mayor del que esta en medio entonces buscamos en la mitad superior donde se encuentra valores mayor a mid
+		{
+			return binarySearch(nombre, mid+1, h);
+		} //si no, significa que el valor que buscamos es menor a mid por lo cual se encuentra en la mitad inferior
+		 	return binarySearch(nombre, l, mid - 1);  
+	}
+	
+	return nullptr;
 }
 
 void Gestor::modificarCliente(int index)

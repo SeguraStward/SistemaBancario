@@ -6,8 +6,9 @@
 
 
 void esperarTecla() {
-	cout << "Presiona Enter para continuar..." <<flush;
-	cin.get();  
+	cout << "Presiona Enter para continuar..." << flush;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cin.get();
 }
 
 void limpiarPantalla() {
@@ -37,7 +38,7 @@ int leerNumero() {
 			return numero;
 		}
 	}
-	
+
 }
 
 bool pedirSiONo() {
@@ -92,31 +93,31 @@ void SistemaBancario::menuPrincipal()
 {
 	int flag = 0;
 	int eleccion;
-	
+
 	do
 	{
 		cout << "Elige que deseas hacer \n1-Registrar clientes\n2-Agregar Cuentas\n3-Modificar o eliminar clientes"
 			"\n4-Usar metodo recursivo\n5-Mostrar todos los clientes registrados\n6-Deposito, retiro o transferencia bancaria\n7-BST opciones"
-		"\n8-Ordenar\n9-manejar transacciones\n10-Mostrar cuentas de un usuario\nPara salir ingrese cualquier otra tecla\n";
+			"\n8-Ordenar\n9-manejar transacciones\n10-Mostrar cuentas de un usuario\n11-Buscar cliente\nPara salir ingrese cualquier otra tecla\n";
 		eleccion = leerNumero();
 		switch (eleccion)
 		{
 
 		case 1: //para registrar los clientes 
-			agregarClientes(); 
+			agregarClientes();
 			break;
-		case 2: 
-			agregarCuentas(); 
+		case 2:
+			agregarCuentas();
 			break;
-		case 3: 
+		case 3:
 			eliminarEditarCliente();
 			break;
-		case 4: 
+		case 4:
 			cout << "La cantidad de clientes registrados es: " << gestor.contadorDeClientes(&gestor) << "\n";
 			break;
 		case 5:
 			gestor.mostrarAllInfoClientes();
-			 
+
 			break;
 		case 6:
 			if (validarUsuario() != nullptr)
@@ -133,20 +134,23 @@ void SistemaBancario::menuPrincipal()
 		case 9:
 			procesarTransacciones();
 			break;
-		 
+
 		case 10:
 			cuentasYTransacciones();
 			break;
-			default:
-			flag = 2;
+		case 11:
+			validarUsuario(); 
 			break;
+
+		default:
+			flag = 2;
+			break; 
 		}
-		 
+
 		esperarTecla();
 		limpiarPantalla();
-	}
-	while (flag == 0);
-	
+	} while (flag == 0);
+
 }
 
 void SistemaBancario::agregarClientes()
@@ -154,24 +158,33 @@ void SistemaBancario::agregarClientes()
 	string nombre;
 	string direccion;
 	string numeroContacto;
+	string password;
 	static int id = 0;
 	string finalizar;
-
+	cout << "\n";
 	cout << "Ingrese nombre: ";
 	getline(cin, nombre);
-	cout << "\n";
 	cout << "Ingrese direccion: ";
 	getline(cin, direccion);
-	cout << "\n";
 	cout << "Ingrese numero: ";
 	getline(cin, numeroContacto);
+	cout << "Ingrese su password: ";
+	getline(cin, password);
 	cout << "\n";
-
 	id++;
+
+
 	Cliente cliente = Cliente(nombre, id, direccion, numeroContacto);//creando cliente
 
-	gestor.agregarCliente(cliente);//agregando al registro
-
+	if (!gestor.agregarCliente(cliente))//agregando al registro
+	{
+		cout << "No se pudo registrar el cliente.\n";
+	}
+	else
+	{
+		cout << "Cliente registrado correctamente.\n";
+		passwords->insert(nombre, password);// agregando el usuario y su contrasena a la base de datos del sistema bancario jajaj
+	}
 
 	cout << "Desea continuar, si o no?" << endl;
 	getline(cin, finalizar);
@@ -179,12 +192,12 @@ void SistemaBancario::agregarClientes()
 	{
 		agregarClientes();
 	}
-	 
+
 }
 
 void SistemaBancario::agregarCuentas()
 {
-	  
+
 	Cliente* cliente = validarUsuario();
 
 	if (cliente == nullptr) {
@@ -198,7 +211,7 @@ void SistemaBancario::agregarCuentas()
 	Cuenta cuenta(numOfAccount, idClienteActual, 5);
 	cout << "------------------------------------------------------\n";
 	cout << "Se le ha creado una cuenta al cliente ->" << "id: " << cliente->getIdentificacion() << "\nNombre: " << cliente->getNombreCompleto() << "\n";
-	cout << "Numero de cuenta -> " << cuenta.getNumeroDeCuenta()<<"\n";
+	cout << "Numero de cuenta -> " << cuenta.getNumeroDeCuenta() << "\n";
 	cout << "------------------------------------------------------\n";
 	cuentas.abrirCuenta(cuenta);
 
@@ -211,22 +224,22 @@ void SistemaBancario::realizarTransaccion()//deposito, retiro o transferencia
 	int cuentaDestino = 0;
 	int monto;
 	string tipo = "";
-	
+
 	cout << "Retiro, deposito o transferencia? digite r, d o t\n";
 	cin >> tipo;
-	
+
 	if (tipo != "r" && tipo != "d" && tipo != "t")
 	{
-		cout << "Entrada invalida\n"; 
+		cout << "Entrada invalida\n";
 	}
 	else
-	{ 
+	{
 		if (tipo == "r") {
 			tipo = "Retiro";
 			cout << "Digite el monto que desea retirar.\n";
 			monto = leerNumero();
 		}
-		else if(tipo == "d") {
+		else if (tipo == "d") {
 			tipo = "Deposito";
 			cout << "Digite el monto que desea depositar.\n";
 			monto = leerNumero();
@@ -237,7 +250,7 @@ void SistemaBancario::realizarTransaccion()//deposito, retiro o transferencia
 			cout << "Digite el monto que desea transfererir.\n";
 			monto = leerNumero();
 			cout << "Ahora digite el numero de la cuenta a la que desea transferir el dinero.\n";
-		    cuentaDestino = eleccionDeCuentaDestino();
+			cuentaDestino = eleccionDeCuentaDestino();
 		}
 		if (monto == 0) {
 			cout << "no se puede hacer una transaccion sin dinero\n";
@@ -246,7 +259,7 @@ void SistemaBancario::realizarTransaccion()//deposito, retiro o transferencia
 		static int idTransaccion = 1;
 		string fecha = obtenerFechaActual();
 		string hora = obtenerHoraActual();
-		Transaccion transaccion(tipo, "pendiente", fecha, hora, monto, cuenta, cuentaDestino,idTransaccion);
+		Transaccion transaccion(tipo, "pendiente", fecha, hora, monto, cuenta, cuentaDestino, idTransaccion);
 
 		transaccion.imprimir();
 		historialGlobal.Insert(transaccion);
@@ -260,10 +273,10 @@ void SistemaBancario::realizarTransaccion()//deposito, retiro o transferencia
 		}
 		idTransaccion++;
 		cout << "La transaccion ha sido creada, debe ser procesada \n";
-		cout << "transaccion con id -> " << transaccion.getIdTransaccion()<<"\n";
+		cout << "transaccion con id -> " << transaccion.getIdTransaccion() << "\n";
 	}
 }
- 
+
 void SistemaBancario::ordenarCuentas()
 {
 	int seleccion;
@@ -283,9 +296,9 @@ void SistemaBancario::ordenarCuentas()
 		selectionSort(cuentas);
 		cuentas.imprimirCuentas();
 		break;
-		default:
-			cout << "Seleccion del algoritmo invalida.\n";
-			break;
+	default:
+		cout << "Seleccion del algoritmo invalida.\n";
+		break;
 	}
 
 }
@@ -298,7 +311,7 @@ void SistemaBancario::ordenarClientes()
 	switch (seleccion)
 	{
 	case 1:
-		QuickSort(gestor.getClientes(), 0, gestor.getSize()-1);
+		QuickSort(gestor.getClientes(), 0, gestor.getSize() - 1);
 		gestor.mostrarClientes();
 		break;
 	case 2:
@@ -306,7 +319,7 @@ void SistemaBancario::ordenarClientes()
 		gestor.mostrarClientes();
 		break;
 	case 3:
-		RecursiveMergeSort(gestor.getClientes(),0, gestor.getSize() - 1);
+		RecursiveMergeSort(gestor.getClientes(), 0, gestor.getSize() - 1);
 		gestor.mostrarClientes();
 		break;
 	default:
@@ -323,7 +336,7 @@ void SistemaBancario::eliminarEditarCliente()
 	cout << "Ingrese el indice del cliente que desea modificar o eliminar.\n ";
 
 	indice = leerNumero();
-	 
+
 	cout << "1-Modificar cliente  2-Eliminar cliente\n";
 	choose = leerNumero();
 	switch (choose)
@@ -363,17 +376,30 @@ Cliente* SistemaBancario::validarUsuario()//para asegurar que el usuario exista
 {
 	cout << "\n-----------------------------------------\n";
 
-	int id;
-	cout << "Por favor ingresa tu id. \n";
-	id = leerNumero();
-	cout << "-----------------------------------------\n";
-	Cliente* cliente = gestor.getCliente(id);
+	string name;
+	cout << "Por favor ingresa tu nombre. \n";
+	cin >> name;
+	
+	QuickSort(gestor.getClientes(), 0, gestor.getSize() - 1);//ordenamos el array de clientes por nombre
+	Cliente* cliente = gestor.binarySearch(name, 0, gestor.getSize() - 1);//realizamos la busqueda de el cliente
+	
+	cout << "Ahora ingresa tu password.\n"; 
+	string password;
+	cin >> password;
 
+	cout << "-----------------------------------------\n";
+	if (!passwords->search(name, password))//verificamos que se haya ingresado el usuario y password correctos
+	{
+		cout << "No pudo ingresar, usuario o password incorrecto.\n";
+		return nullptr;
+	}
 	if (cliente != nullptr)
 	{
 		cout << "Cliente encontrado\n";
-		cout << "Bienvenido estimado " << cliente->getNombreCompleto() << "\n";
-		idClienteActual = id;
+		cout << "Bienvenido estimado.\n";
+		cliente->imprimir();
+
+		idClienteActual = cliente->getIdentificacion();
 		cout << "\n-----------------------------------------\n";
 		return cliente;
 	}
@@ -401,7 +427,7 @@ int SistemaBancario::eleccionDeCuentaDestino()
 	int seleccion = leerNumero();
 
 
-	return seleccion; 
+	return seleccion;
 }
 
 void SistemaBancario::bstOpciones()//busca la transaccion por medio de su id y tambien muestra todas las transacciones con los recorridos 
@@ -418,12 +444,13 @@ void SistemaBancario::bstOpciones()//busca la transaccion por medio de su id y t
 		cout << "Ingrese el id de la transaccion para buscar en el historialGlobal.\n";
 		seleccion = leerNumero();
 
-		temp = historialGlobal.Search(seleccion);
-		if(temp != nullptr)
+		temp = historialGlobal.Search(seleccion);//aqui hago la busqueda asociativa por medio del id de la transaccion 
+		if (temp != nullptr)
 		{
 			cout << "Transaccion encontrada.\n";
 			temp->data.imprimir();
-		}else
+		}
+		else
 		{
 			cout << "Transaccion no encontrada\n";
 		}
@@ -467,9 +494,7 @@ void SistemaBancario::ordenar()//para ordenar las listas de cuentas o clientes
 		cout << "Seleccion invalida.\n";
 		break;
 
-	}
-
-
+	} 
 }
 
 void SistemaBancario::procesarTransacciones()
@@ -479,61 +504,16 @@ void SistemaBancario::procesarTransacciones()
 	while (!solicitudesPrioritarias.estaVacia())
 	{
 		Transaccion actual = solicitudesPrioritarias.extraer();//extrae de la cola prioritaria la transaccion con mayor prioridad 
-		
+
 		cout << "Transaccion prioritaria.\n";
-		actual.imprimir();
-		cout << "Deseas intentar procesarla o bloquearla? 1-procesar 2-bloquear\n";
-		
-		do//para que seleccione una opcion correcta
-		{
-			seleccion = leerNumero();
-			if(seleccion == 1)
-			{
-				 if(actual.getTipoDeOperacion() == "Transferencia")//tipo transferencia entonces se dirige a hacer la transferencia o sea la transaccion tiene cuenta de origen y cuenta de destino
-				 {
-					 transferencia(actual);
-				 }else//si no se va a por el deposito o retiro que es en una misma cuenta
-				 {
-					 depositoRetiro(actual);
-				 }
-			
-			}else if(seleccion == 2)
-			{
-				actual.setEstado("Bloqueada");
-				historialGlobal.replace(actual);//se actualiza en el bst
-			}
-		}
-		while (seleccion != 1 && seleccion != 2); 
+		procesarOBloquear(actual);
 	}
 	//despues se procesan las transacciones normales con un proceso igual
 	while (!solicitudes.vacia())
 	{
 		Transaccion actual = solicitudes.desencolar();//desencolando la transaccion normal
 		cout << "Transaccion normal.\n";
-		actual.imprimir();
-		cout << "Deseas intentar procesarla o bloquearla? 1-procesar 2-bloquear\n";
-
-		do//para que seleccione una opcion correcta
-		{
-			seleccion = leerNumero();
-			if (seleccion == 1)
-			{
-				if (actual.getTipoDeOperacion() == "Transferencia")
-				{
-					transferencia(actual);
-				}
-				else
-				{
-					depositoRetiro(actual);
-				}
-
-			}
-			else if (seleccion == 2)
-			{
-				actual.setEstado("Bloqueada");
-				historialGlobal.replace(actual);
-			}
-		} while (seleccion != 1 && seleccion != 2);
+		procesarOBloquear(actual);
 	}
 }
 
@@ -549,7 +529,7 @@ bool SistemaBancario::transferencia(Transaccion transaccion)
 		historialGlobal.replace(transaccion);
 		return false;
 	}
-	if(!origen)//igualmente aqui con la cuenta origen
+	if (!origen)//igualmente aqui con la cuenta origen
 	{
 		cout << "Transaccion bloqueada porque la cuenta origen es invalida.\n";
 		transaccion.setEstado("Bloqueada");
@@ -558,7 +538,7 @@ bool SistemaBancario::transferencia(Transaccion transaccion)
 	}
 
 
-	if(origen->getSaldo() < transaccion.getMonto())//si las cuentas existen se evalua el monto de la cuenta de la que se va a sacar dinero para depositarlo en otra cuenta y si el monto de la cuenta es menor al que se desea transferir se bloquea porque es saldo insuficiente
+	if (origen->getSaldo() < transaccion.getMonto())//si las cuentas existen se evalua el monto de la cuenta de la que se va a sacar dinero para depositarlo en otra cuenta y si el monto de la cuenta es menor al que se desea transferir se bloquea porque es saldo insuficiente
 	{
 		cout << "Transaccion bloqueada porque la cuenta origen no tiene el saldo suficiente.\n";
 		transaccion.setEstado("Bloqueada");
@@ -581,27 +561,29 @@ void SistemaBancario::depositoRetiro(Transaccion transaccion)
 {
 	Cuenta* cuenta = validarCuenta(transaccion.getNumeroDeCuenta());
 
-	if(cuenta == nullptr)//asegurando que la cuenta exista
+	if (cuenta == nullptr)//asegurando que la cuenta exista
 	{
 		cout << "Transaccion bloqueada porque la cuenta no existe.\n";
 		transaccion.setEstado("Bloqueada");
 		historialGlobal.replace(transaccion);
 		return;
 	}
-	if(transaccion.getTipoDeOperacion() == "Deposito")
+	if (transaccion.getTipoDeOperacion() == "Deposito")
 	{
 		cuenta->setSaldo(cuenta->getSaldo() + transaccion.getMonto());//sumandole el monto de la transaccion al monto de la cuenta
 		transaccion.setEstado("Procesada");
 		historialGlobal.replace(transaccion);
 		cout << "Deposito correctamente procesado.\n";
-	}else if(transaccion.getTipoDeOperacion() == "Retiro")
+	}
+	else if (transaccion.getTipoDeOperacion() == "Retiro")
 	{
-		if(transaccion.getMonto() > cuenta->getSaldo())//verificando que la cuenta tenga suficiente dinero
+		if (transaccion.getMonto() > cuenta->getSaldo())//verificando que la cuenta tenga suficiente dinero
 		{
 			cout << "Transaccion bloqueada por que el monto a retirar supera el saldo de la cuenta.\n";
 			transaccion.setEstado("Bloqueada");
 			historialGlobal.replace(transaccion);
-		}else//si esta la cuenta tienen suficiente dinero entonces se le hace el retiro y se actualiza en el bst
+		}
+		else//si esta la cuenta tienen suficiente dinero entonces se le hace el retiro y se actualiza en el bst
 		{
 			cuenta->setSaldo(cuenta->getSaldo() - transaccion.getMonto());
 			transaccion.setEstado("Procesada");
@@ -610,7 +592,7 @@ void SistemaBancario::depositoRetiro(Transaccion transaccion)
 		}
 	}
 	cuenta->agregarAHistorial(transaccion);//se agrega al historial la transaccion 
-	 
+
 }
 
 void SistemaBancario::cuentasYTransacciones()//para mostrar las cuentas y el historial de transacciones de la cuenta
@@ -645,5 +627,37 @@ void SistemaBancario::cuentasYTransacciones()//para mostrar las cuentas y el his
 	}
 
 }
+//El usuario tendra la opcion de intentar procesar la transaccion o de bloquearla de una sola vez
+void SistemaBancario::procesarOBloquear(Transaccion actual)
+{
+	int seleccion;
+	//imprime la informacion de la transaccion
+	actual.imprimir();
+	cout << "Deseas intentar procesarla o bloquearla? 1-procesar 2-bloquear\n";
+
+	do //ciclo para asegurarse de que se elija la opcion correcta
+	{
+		seleccion = leerNumero();
+		if (seleccion == 1)
+		{
+			if (actual.getTipoDeOperacion() == "Transferencia")
+			{
+				transferencia(actual);
+			}
+			else
+			{
+				depositoRetiro(actual);
+			}
+
+		}
+		else if (seleccion == 2)
+		{
+			actual.setEstado("Bloqueada");
+			historialGlobal.replace(actual);
+		}
+	} while (seleccion != 1 && seleccion != 2);//si la seleccion es igual a 1 o es igual a 2 entonces se convierte en falso y se sale del ciclo
+}
+
+
 
 
