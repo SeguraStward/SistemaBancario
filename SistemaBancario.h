@@ -9,7 +9,7 @@
 #include "Transaccion.h"
 #include "Sorting.h"
 #include <iostream> 
-
+#include "Graph.h"
 #include "HashMap.h"
 using namespace std;
 
@@ -49,4 +49,5 @@ public:
 	void depositoRetiro(Transaccion transaccion);//accion de deposito o retirno de dinero en una cuenta
 	void cuentasYTransacciones();//muestra las cuentas y en caso de querer mostrar las transacciones de una cuenta especifica las muestra
 	void procesarOBloquear(Transaccion actual);
+	void GrafoOpciones();
 };

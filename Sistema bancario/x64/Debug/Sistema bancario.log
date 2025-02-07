@@ -1,2 +1,6 @@
 ﻿  Graph.cpp
-  Sistema bancario.vcxproj -> C:\Users\stward segura\source\repos\Sistema bancario\x64\Debug\Sistema bancario.exe
+  SistemaBancario.cpp
+C:\Users\stwar\Documents\C++\sistema bancario\SistemaBancario\SistemaBancario.cpp(504,6): warning C4101: 'seleccion': variable local sin referencia
+  Sorting.cpp
+  Generando código...
+  Sistema bancario.vcxproj -> C:\Users\stwar\Documents\C++\sistema bancario\SistemaBancario\x64\Debug\Sistema bancario.exe

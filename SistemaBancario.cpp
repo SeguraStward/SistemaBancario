@@ -98,7 +98,7 @@ void SistemaBancario::menuPrincipal()
 	{
 		cout << "Elige que deseas hacer \n1-Registrar clientes\n2-Agregar Cuentas\n3-Modificar o eliminar clientes"
 			"\n4-Usar metodo recursivo\n5-Mostrar todos los clientes registrados\n6-Deposito, retiro o transferencia bancaria\n7-BST opciones"
-			"\n8-Ordenar\n9-manejar transacciones\n10-Mostrar cuentas de un usuario\n11-Buscar cliente\nPara salir ingrese cualquier otra tecla\n";
+			"\n8-Ordenar\n9-manejar transacciones\n10-Mostrar cuentas de un usuario\n11-Buscar cliente\n12-Grafo opciones\nPara salir ingrese cualquier otra tecla\n";
 		eleccion = leerNumero();
 		switch (eleccion)
 		{
@@ -141,7 +141,9 @@ void SistemaBancario::menuPrincipal()
 		case 11:
 			validarUsuario(); 
 			break;
-
+		case 12:
+			GrafoOpciones();
+			break;
 		default:
 			flag = 2;
 			break; 
@@ -656,6 +658,63 @@ void SistemaBancario::procesarOBloquear(Transaccion actual)
 			historialGlobal.replace(actual);
 		}
 	} while (seleccion != 1 && seleccion != 2);//si la seleccion es igual a 1 o es igual a 2 entonces se convierte en falso y se sale del ciclo
+}
+
+void SistemaBancario::GrafoOpciones()
+{
+	int* visited;
+	
+	Grafo g;
+	
+	g.crearSucursales();
+	g.establecerAristas();
+
+	cout << "1-Utilizar Prim MST 2-Utilizar kruskal 3-Utilizar BFS 4.Utilizar DFS\n";
+	int seleccion = 0;
+
+	switch (seleccion)
+	{
+
+	case 1:
+		g.prim();
+		break;
+	case 2:
+		g.kruskal();
+		break;
+	case 3:
+	
+		seleccion = leerNumero();
+		if (seleccion >= 0 && seleccion < g.getSize()) {
+			g.BFS(seleccion);
+		}
+		else {
+			cout << "Indice invalido\n";
+		}
+		break;
+	case 4:
+		
+		seleccion = leerNumero();
+		if (seleccion >= 0 && seleccion < g.getSize()) {
+			visited = new int[g.getSize()];
+			for (int i = 0; i < g.getSize(); i++) {
+				visited[i] = 0;//se marcan los nodos(indices) como no visitados
+			}
+			g.DFS(seleccion, visited);
+		}
+		else {
+			cout << "se selecciono un nodo invalido\n";
+		}
+		
+		break;
+
+
+	default:
+		break;
+	}
+
+
+
+
 }
 
 

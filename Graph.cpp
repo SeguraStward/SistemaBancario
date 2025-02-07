@@ -78,14 +78,16 @@ void Grafo::BFS(int origen)
 }
 void Grafo::DFS(int origen, int visitados[])
 {
-	if (visitados[origen] == 0)
+	if (visitados[origen] == 0)//si no ha sido visitado entonces entra
 	{
 		cout << origen << " -> ";
-		visitados[origen] = 1;
+		visitados[origen] = 1;//se marca como visitado
 
 		for (int j = 0; j < size; j++)
-		{
+		{    //si existe un costo y el nodo j no ha sido visitado entonces se llama recursivamente
+			//y se repite el proceso yendo en profundidad por los nodos
 			if (matrix[origen][j] != I && visitados[j] == 0)
+
 				DFS(j, visitados);
 		}
 	}
@@ -278,10 +280,13 @@ void Grafo::imprimirMST() {\
 
 void Grafo::agregarArista(int origen, int destino, int costo)
 {
-
-	matrix[origen][destino] = costo;
-	matrix[destino][origen] = costo;
-
+	if (origen != destino) {
+		matrix[origen][destino] = costo;
+		matrix[destino][origen] = costo;
+	}
+	else {
+		cout << "No se permite que un nodo tenga un camino hacia si mismo...\n";
+	}
 }
 
 void Grafo::establecerAristas()
@@ -304,7 +309,7 @@ void Grafo::establecerAristas()
 
 		agregarArista(origen, destino, costo);
 		edgesSize++;//aumentando size de las aristas para kruskal
-		cout << "Desea agregar otra conexion? (s/n): ";
+		cout << "Desea agregar una conexion? (s/n): ";
 		cin >> continuar;
 		limpiarPantalla();
 	} while (continuar == 's' || continuar == 'S');
