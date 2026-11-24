@@ -1,50 +1,52 @@
 #include "HashMap.h"
- 
+
+// Sondeo lineal: desde el indice que da el hash avanzamos de uno en uno
+// hasta encontrar una casilla vacia o la casilla que ya tiene esta misma llave.
 int HashMap::probe(string key)
 {
 	int index = static_cast<int>(hash(key));
 	int i = 0;
-	while (array[(index + i) % size] != "")i++;//buscamos un lugar vacio para la insercion, ya que hubo una colision antes
+	while (!keys[(index + i) % size].empty() && keys[(index + i) % size] != key) i++;
 
-	return (index + 1) % size;
+	return (index + i) % size;
 }
-//esta funcion produce una distribucion uniforme de los valores reduciendo las colisiones 
-unsigned long HashMap::hash(string key)//estoy usando jdb2 funcion hash creada por Daniel J. Bernstein, matematico, criptografo y programador, 
-{ 
-	unsigned long hash = 5381;//numero elegido por Bernstein
-	for (char ch : key) {
-		//(hash << 5) esto es un desplazamiento de 5 bits a la izquierda es igual (hash * 32)
-		hash = ((hash << 5) + hash) + static_cast<int>(ch); 
+
+// djb2: funcion hash de Daniel J. Bernstein. Produce una distribucion uniforme y reduce las colisiones.
+unsigned long HashMap::hash(string key)
+{
+	unsigned long hash = 5381; // numero elegido por Bernstein
+	for (unsigned char ch : key) {
+		// (hash << 5) es un desplazamiento de 5 bits a la izquierda, igual que (hash * 32)
+		hash = ((hash << 5) + hash) + ch;
 	}
-	return hash % size; 
+	return hash % size;
 }
 
 void HashMap::insert(const string key, const string password)
 {
-	if(static_cast<float>(elements)/static_cast<float>(size) >= 0.5)//para evitar que se llene, evitamos problemas y la tabla se mantiene eficiente, es recomendado mantener el factor de carga igual o menor a 0.5 eso dice mi profesor indu
+	// Mantenemos el factor de carga en 0.5 o menos para que la tabla siga siendo eficiente.
+	if (static_cast<float>(elements) / static_cast<float>(size) >= 0.5f)
 	{
 		cout << "Tabla de passwords llena, no se puede insertar mas.\n";
 		return;
-	} 
-	int index = static_cast<int>(hash(key));
-	if (!array[index].empty())index = probe(key);// si el indice que nos dio el hash se encuentra ocupado hacemos el sondeo lineal nos desplazamos a la siguiente direccion
+	}
 
+	int index = probe(key);
+	if (keys[index].empty()) elements++; // llave nueva; si ya existia solo se actualiza la contraseña
+
+	keys[index] = key;
 	array[index] = password;
-
-	elements++;
 }
 
-
+// Retorna true solo si existe esa llave y su contraseña coincide.
 bool HashMap::search(string key, string password)
 {
 	int index = static_cast<int>(hash(key));
-	int i = 0;
 
-	while (array[(index + i) % size] != password) {//Por si hubo una colision antes entonces hacemos el sondeo lineal, osea nos desplazamos al siguiente indice
-		if (array[(index + i) % size] == "")return false;// si nos topamos con un valor vacio significa que el valor no esta en la tabla 
-		i++;
+	for (int i = 0; i < size; i++) {
+		int actual = (index + i) % size;
+		if (keys[actual].empty()) return false;            // casilla vacia: la llave no esta en la tabla
+		if (keys[actual] == key) return array[actual] == password;
 	}
-	//si el ciclo termino significa que el valor si se encontro entonces retornamos true, o sea el usuario ingreso la contrasena correcta
-	return true;
+	return false;
 }
- 
