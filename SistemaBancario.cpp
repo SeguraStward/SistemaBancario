@@ -1,8 +1,19 @@
 #include "SistemaBancario.h"
 
 #include <algorithm>
+#include <cctype>
 #include <chrono>
+#include <ctime>
 #include <thread>
+
+// localtime_s solo existe en MSVC; en Linux/macOS se usa localtime_r (mismo efecto, argumentos invertidos).
+static bool horaLocalSegura(const time_t* tiempo, tm* resultado) {
+#ifdef _WIN32
+	return localtime_s(resultado, tiempo) == 0;
+#else
+	return localtime_r(tiempo, resultado) != nullptr;
+#endif
+}
 
 
 void esperarTecla() {
@@ -48,7 +59,8 @@ bool pedirSiONo() {
 		cout << "Ingrese 'si' o 'no': ";
 		cin >> respuesta;
 
-		ranges::transform(respuesta.begin(), respuesta.end(), respuesta.begin(), ::tolower);
+		transform(respuesta.begin(), respuesta.end(), respuesta.begin(),
+			[](unsigned char c) { return static_cast<char>(tolower(c)); });
 
 		if (respuesta == "si") {
 			return true;
@@ -66,7 +78,7 @@ string obtenerFechaActual() {
 	time_t tiempoActual = time(nullptr);
 	tm fechaLocal = {};
 
-	if (localtime_s(&fechaLocal, &tiempoActual) != 0) {
+	if (!horaLocalSegura(&tiempoActual, &fechaLocal)) {
 		return "Error al obtener la fecha";
 	}
 	char buffer[100];
@@ -79,7 +91,7 @@ string obtenerHoraActual() {
 	time_t tiempoActual = time(nullptr);
 	tm horaLocal = {};
 
-	if (localtime_s(&horaLocal, &tiempoActual) != 0) {
+	if (!horaLocalSegura(&tiempoActual, &horaLocal)) {
 		return "Error al obtener la hora";
 	}
 
